@@ -1,55 +1,57 @@
+from telegram.ext import Updater, CommandHandler
 
-from telegram import Update
-from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
-
+# Senin bot token
 BOT_TOKEN = "8395556440:AAEifvx1_0Xr9aIdv7db6Bpagr74tnbxbHE"
 
 # /start komutu
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("💻 BORSA BUZZ borsa botuna hoş geldin!\n\n"
-                                    "Kullanabileceğin komutlar:\n"
-                                    "- /derinlik HISSE\n"
-                                    "- /akd HISSE\n"
-                                    "- /akd20 HISSE\n"
-                                    "- /akdtarih HISSE\n"
-                                    "- /kademe HISSE\n"
-                                    "- /balina HISSE\n"
-                                    "- /takas HISSE\n"
-                                    "- /teorik HISSE\n"
-                                    "- /pgc HISSE\n"
-                                    "- /islem HISSE\n"
-                                    "- /kurum\n"
-                                    "- /bofa\n"
-                                    "- /tera\n"
-                                    "- /hacimtrend\n")
+def start(update, context):
+    update.message.reply_text(
+        "💻 BORSA BUZZ borsa botuna hoş geldin!\n\n"
+        "Kullanabileceğin komutlar:\n"
+        "- /derinlik HISSE\n"
+        "- /akd HISSE\n"
+        "- /akd20 HISSE\n"
+        "- /akdtarih HISSE\n"
+        "- /kademe HISSE\n"
+        "- /balina HISSE\n"
+        "- /takas HISSE\n"
+        "- /teorik HISSE\n"
+        "- /pgc HISSE\n"
+        "- /islem HISSE\n"
+        "- /kurum\n"
+        "- /bofa\n"
+        "- /tera\n"
+        "- /hacimtrend"
+    )
 
-# Örnek komut: /derinlik THYAO
-async def derinlik(update: Update, context: ContextTypes.DEFAULT_TYPE):
+# Örnek komutlar
+def derinlik(update, context):
     hisse = context.args[0].upper() if context.args else "THYAO"
-    await update.message.reply_text(f"📈 {hisse} 25 Kademe Derinlik (Örnek veri)")
+    update.message.reply_text(f"📈 {hisse} 25 Kademe Derinlik (Örnek veri)")
 
-# Diğer örnek komutlar (şimdilik örnek mesaj)
-async def akd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def akd(update, context):
     hisse = context.args[0].upper() if context.args else "THYAO"
-    await update.message.reply_text(f"📊 {hisse} Aracı Kurum Dağılımı (Örnek veri)")
+    update.message.reply_text(f"📊 {hisse} Aracı Kurum Dağılımı (Örnek veri)")
 
-async def balina(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def balina(update, context):
     hisse = context.args[0].upper() if context.args else "THYAO"
-    await update.message.reply_text(f"🐋 {hisse} Balina Avcısı (Örnek veri)")
+    update.message.reply_text(f"🐋 {hisse} Balina Avcısı (Örnek veri)")
 
-async def pgc(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def pgc(update, context):
     hisse = context.args[0].upper() if context.args else "THYAO"
-    await update.message.reply_text(f"💵 {hisse} Para Giriş/Çıkış (Örnek veri)")
+    update.message.reply_text(f"💵 {hisse} Para Giriş/Çıkış (Örnek veri)")
 
-# Telegram bot uygulaması
-app = ApplicationBuilder().token(BOT_TOKEN).build()
+# Updater ve handler ayarları
+updater = Updater(BOT_TOKEN, use_context=True)
+dp = updater.dispatcher
 
 # Komutları ekle
-app.add_handler(CommandHandler("start", start))
-app.add_handler(CommandHandler("derinlik", derinlik))
-app.add_handler(CommandHandler("akd", akd))
-app.add_handler(CommandHandler("balina", balina))
-app.add_handler(CommandHandler("pgc", pgc))
+dp.add_handler(CommandHandler("start", start))
+dp.add_handler(CommandHandler("derinlik", derinlik))
+dp.add_handler(CommandHandler("akd", akd))
+dp.add_handler(CommandHandler("balina", balina))
+dp.add_handler(CommandHandler("pgc", pgc))
 
-# Botu başlat (polling ile)
-app.run_polling()
+# Botu başlat
+updater.start_polling()
+updater.idle()
